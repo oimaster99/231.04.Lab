@@ -49,7 +49,10 @@ public:
     // Position :    The Position class can work with other positions,
     //               Allowing for comparisions, copying, etc.
     Position(const Position& rhs) { colRow = rhs.colRow; }
-    Position(string pos) {}
+    Position(string pos) //: colRow(0xFF)
+    {
+        set(pos[0] - 'a', pos[1]);
+    }
     Position() : colRow(0xFF) {} // Default to invalid position
     bool isInvalid() const { return (colRow & 0x88) != 0; }
     bool isValid() const { return !isInvalid(); }
