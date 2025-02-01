@@ -62,24 +62,29 @@ public:
    Piece(int c, int r, bool isWhite = true)           
    {
        position = Position(c, r);
+       fWhite = isWhite;
    }
    Piece(const Piece & piece)                         {}
    virtual ~Piece()                                   {}
    virtual const Piece& operator = (const Piece& rhs);
 
    // getters
-   virtual bool operator == (PieceType pt) const { return true;         }
-   virtual bool operator != (PieceType pt) const { return true;         }
+   virtual bool operator == (PieceType pt) const { return this->getType() == pt; }
+   virtual bool operator != (PieceType pt) const { return this->getType() != pt;         }
    virtual bool isWhite()                  const { return fWhite;         }
    virtual bool isMoved()                  const { return nMoves;         }
    virtual int  getNMoves()                const { return nMoves;         }
    virtual void decrementNMoves()                {                      }
-   virtual const Position & getPosition()  const { return Position();   }
+   virtual const Position & getPosition()  const { return position;   }
    virtual bool justMoved(int currentMove) const { return currentMove - lastMove <= 2; }
 
    // setter
    virtual void setLoc(Position pos) { position = pos; }
-   virtual void setLastMove(int currentMove) { lastMove = currentMove; }
+   virtual void setLastMove(int currentMove) 
+   { 
+       lastMove = currentMove; 
+       nMoves++;
+   }
 
    // overwritten by the various pieces
    virtual PieceType getType() const = 0;

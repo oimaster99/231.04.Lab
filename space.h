@@ -19,7 +19,10 @@ class Space : public Piece
 {
 	Space() : Piece() { };
 	Space(Position pos, bool isWhite = true) : Piece(pos, isWhite) { }
-	const PieceType & getType() const override { return SPACE; }
+	Space(int c, int r) : Piece(c, r) { this->position = Position(c, r); }
+	~Space() { }
+
+	PieceType getType() const { return SPACE; }
 	void display(ogstream& gout) { };
 
 };

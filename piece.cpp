@@ -23,8 +23,11 @@ using namespace std;
  ***********************************************/
 const Piece & Piece::operator = (const Piece & rhs)
 {
-
-   return *this;
+	position = rhs.position;
+	fWhite = rhs.fWhite;
+	nMoves = rhs.nMoves;
+	lastMove = rhs.lastMove;
+    return *this;
 }
 
 /************************************************
