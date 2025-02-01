@@ -119,9 +119,33 @@ void Board::move(const Move & move)
  *********************************************/
 BoardEmpty::BoardEmpty() : BoardDummy(), pSpace(nullptr), moveNumber(0)
 {
-   pSpace = new Space(0, 0);
+    pSpace = new Space(0, 0); // Ensure pSpace is a valid piece
+    moveNumber = 0;
+
+    // Initialize board with nullptr (empty positions)
+    for (int col = 0; col < 8; col++)
+        for (int row = 0; row < 8; row++)
+            board[col][row] = nullptr;
 }
-BoardEmpty::~BoardEmpty() 
+
+BoardEmpty::~BoardEmpty()
 {
-   delete pSpace;
+    if (pSpace)
+    {
+        delete pSpace;
+        pSpace = nullptr;
+    }
+}
+
+const Piece& BoardEmpty::operator [] (const Position& pos) const
+{
+    assert(pos.isValid());
+
+    if (board[pos.getCol()][pos.getRow()])
+        return *(board[pos.getCol()][pos.getRow()]);
+    else if (pSpace)  // Ensure pSpace is valid before returning
+        return *pSpace;
+
+    assert(false); // This should never happen
+    throw std::runtime_error("BoardEmpty: pSpace is nullptr");
 }

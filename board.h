@@ -12,6 +12,7 @@
 #include <stack>
 #include <cassert>
 #include "move.h"   // Because we return a set of Move
+#include "pieceSpace.h"
 
 class ogstream;
 class TestPawn;
@@ -106,32 +107,12 @@ public:
  **************************************************/
 class BoardEmpty : public BoardDummy
 {
-   friend TestBoard;
+    friend TestBoard;
 public:
-   Piece * pSpace;
-   int moveNumber;
+    Piece* pSpace;
+    int moveNumber;
 
-   BoardEmpty();/* : pSpace(nullptr), moveNumber(0)
-   {
-       pSpace = new PieceDummy();
-       for (int col = 0; col < 8; col++)
-           for (int row = 0; row < 8; row++)
-               board[col][row] = nullptr;
-   }*/
-
-   ~BoardEmpty(); /*
-   {
-       delete pSpace;
-       pSpace = nullptr;
-   }; */
-   const Piece& operator [] (const Position& pos) const
-   {
-      assert(pos.isValid());
-      if (board[pos.getCol()][pos.getRow()])
-         return *(board[pos.getCol()][pos.getRow()]);
-      else
-         return *pSpace;
-   }
-   int  getCurrentMove() const { return moveNumber; }
+    BoardEmpty();
+    ~BoardEmpty();
+    const Piece& operator [] (const Position& pos) const;
 };
-
