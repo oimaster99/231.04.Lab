@@ -111,19 +111,19 @@ public:
    Piece * pSpace;
    int moveNumber;
 
-   BoardEmpty() : pSpace(nullptr), moveNumber(0) 
+   BoardEmpty();/* : pSpace(nullptr), moveNumber(0)
    {
        pSpace = new PieceDummy();
        for (int col = 0; col < 8; col++)
            for (int row = 0; row < 8; row++)
                board[col][row] = nullptr;
-   }
+   }*/
 
-   ~BoardEmpty() 
+   ~BoardEmpty(); /*
    {
        delete pSpace;
        pSpace = nullptr;
-   };
+   }; */
    const Piece& operator [] (const Position& pos) const
    {
       assert(pos.isValid());
