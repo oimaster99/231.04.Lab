@@ -26,9 +26,27 @@ void Knight::display(ogstream* pgout) const
  *********************************************/
 void Knight::getMoves(set <Move>& moves, const Board& board) const
 {
-    const Delta delta[] =
+    ColRowP movement[] =
     {
        {-1, 2}, {1, 2}, {-1, -2}, {1, -2},
        {-2, 1}, {2, 1}, {-2, -1}, {2, -1}
     };
+    for (int i = 0; i < 8; i++) 
+    {
+        int r = position.getRow() + movement[i].row;
+        int c = position.getCol() + movement[i].col;
+        Position possibleMove = Position(c, r);
+
+        if (possibleMove.isValid()) 
+        {
+            if (board[possibleMove].getType() == SPACE)
+            {
+                moves.insert(Move(position, possibleMove, isWhite()));
+            }
+            else if (board[possibleMove].isWhite() != this->isWhite())
+            {
+                moves.insert(Move(position, possibleMove, isWhite(), board[possibleMove].getType()));
+            };
+        }
+    }
 }

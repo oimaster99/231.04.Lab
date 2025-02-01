@@ -37,8 +37,15 @@ void Board::reset(bool fFree)
 {
    // free everything
    for (int r = 0; r < 8; r++)
-      for (int c = 0; c < 8; c++)
-         board[c][r] = nullptr;
+      for (int c = 0; c < 8; c++) 
+      {
+          board[c][r] = nullptr;
+      }
+
+   board[1][0] = new Knight(Position(1, 0), true);
+   board[6][0] = new Knight(Position(1, 0), true);
+   board[1][7] = new Knight(Position(1, 0), true);
+   board[6][7] = new Knight(Position(1, 0), true);
 }
 
 // we really REALLY need to delete this.
@@ -50,11 +57,11 @@ Space space(0,0);
 ***********************************************/
 const Piece& Board::operator [] (const Position& pos) const
 {
-   return space;
+   return *board[pos.getCol()][pos.getRow()];
 }
 Piece& Board::operator [] (const Position& pos)
 {
-   return space;
+    return *board[pos.getCol()][pos.getRow()];
 }
 
  /***********************************************
@@ -83,7 +90,13 @@ Board::Board(ogstream* pgout, bool noreset) : pgout(pgout), numMoves(0)
  ************************************************/
 void Board::free()
 {
-
+    // free everything
+    for (int r = 0; r < 8; r++)
+        for (int c = 0; c < 8; c++)
+            if (board[c][r]) {
+                board[c][r] = nullptr;
+            }
+        
 }
 
 
@@ -106,7 +119,14 @@ void Board::assertBoard()
  *********************************************/
 void Board::move(const Move & move)
 {  
-
+    Position source = move.getSource();
+    Position dest = move.getDest();
+    Piece* p = board[source.getCol()][source.getRow()];
+    board[dest.getCol()][dest.getRow()] = p;
+    board[source.getCol()][source.getRow()] = new Space(source.getCol(), source.getRow());
+    p->setLoc(dest);
+    p->setLastMove(numMoves);
+    numMoves++;
 }
 
 
@@ -119,33 +139,23 @@ void Board::move(const Move & move)
  *********************************************/
 BoardEmpty::BoardEmpty() : BoardDummy(), pSpace(nullptr), moveNumber(0)
 {
-    pSpace = new Space(0, 0); // Ensure pSpace is a valid piece
-    moveNumber = 0;
-
-    // Initialize board with nullptr (empty positions)
-    for (int col = 0; col < 8; col++)
-        for (int row = 0; row < 8; row++)
-            board[col][row] = nullptr;
+   pSpace = new Space(0, 0);
+}
+BoardEmpty::~BoardEmpty() 
+{
+   delete pSpace;
 }
 
-BoardEmpty::~BoardEmpty()
+BoardDummy::BoardDummy() : Board(nullptr, true)
 {
-    if (pSpace)
+    numMoves = 0;
+
+    for (int x = 0; x < 8; x++) 
     {
-        delete pSpace;
-        pSpace = nullptr;
+        for (int y = 0; y < 8; y++) 
+        {
+            board[x][y] = nullptr;
+        }
     }
-}
 
-const Piece& BoardEmpty::operator [] (const Position& pos) const
-{
-    assert(pos.isValid());
-
-    if (board[pos.getCol()][pos.getRow()])
-        return *(board[pos.getCol()][pos.getRow()]);
-    else if (pSpace)  // Ensure pSpace is valid before returning
-        return *pSpace;
-
-    assert(false); // This should never happen
-    throw std::runtime_error("BoardEmpty: pSpace is nullptr");
 }

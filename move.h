@@ -37,9 +37,17 @@ public:
         *this = rhs;
     }
 
-    Move(const char* s, bool isW = true) : promote(SPACE), capture(SPACE), isWhite(isW), moveType(MOVE)
+    Move(Position source, Position dest, bool isWht, PieceType cap = SPACE, MoveType moveT = MOVE, PieceType promotion = SPACE) :
+        source(source), dest(dest), capture(cap), moveType(moveT), isWhite(isWht), promote(promotion) { };
+
+    /*Move(const char* s, bool isW = true) : promote(SPACE), capture(SPACE), isWhite(isW), moveType(MOVE)
     {
         *this = s;
+    }*/
+
+    Move(string text) 
+    {
+        setText(text);
     }
 
     bool operator==(const Move& rhs) const {

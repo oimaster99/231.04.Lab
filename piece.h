@@ -49,11 +49,20 @@ public:
    friend TestKnight;
    friend TestPawn;
    friend TestBoard;
+
+   struct ColRowP 
+   {
+       int col;
+       int row;
+   };
    
    // constructors and stuff
    Piece() : position(Position(0, 0)), fWhite(true), nMoves(0), lastMove(0) {} //Default Constructor
    Piece(const Position & pos, bool isWhite = true)   {}
-   Piece(int c, int r, bool isWhite = true)           {}
+   Piece(int c, int r, bool isWhite = true)           
+   {
+       position = Position(c, r);
+   }
    Piece(const Piece & piece)                         {}
    virtual ~Piece()                                   {}
    virtual const Piece& operator = (const Piece& rhs);
@@ -69,6 +78,7 @@ public:
    virtual bool justMoved(int currentMove) const { return currentMove - lastMove <= 2; }
 
    // setter
+   virtual void setLoc(Position pos) { position = pos; }
    virtual void setLastMove(int currentMove) { lastMove = currentMove; }
 
    // overwritten by the various pieces
