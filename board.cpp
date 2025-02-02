@@ -137,15 +137,15 @@ BoardEmpty::~BoardEmpty()
     }
 }
 
-const Piece& BoardEmpty::operator [] (const Position& pos) const
+const Piece& BoardEmpty::operator[](const Position& pos) const
 {
     assert(pos.isValid());
 
     if (board[pos.getCol()][pos.getRow()])
-        return *(board[pos.getCol()][pos.getRow()]);
-    else if (pSpace)  // Ensure pSpace is valid before returning
-        return *pSpace;
+        return *(board[pos.getCol()][pos.getRow()]); // Return existing piece
+    else if (pSpace)
+        return *pSpace; // Return a Space if empty
 
-    assert(false); // This should never happen
+    assert(false);
     throw std::runtime_error("BoardEmpty: pSpace is nullptr");
 }
